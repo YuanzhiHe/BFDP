@@ -20,10 +20,10 @@ Benchmark-native failure is not always policy failure. BFDP audits the path from
 
 The repository is organized as:
 
-- `core_code/config/`: default experiment configuration
-- `core_code/scripts/`: runnable training, export, probe, replay, and analysis scripts
-- `core_code/svh_dp/`: local package for training, evaluation, and benchmark adapters
-- `core_code/vendor/`: bundled supporting code used by the local pipeline
+- `src/config/`: default experiment configuration
+- `src/scripts/`: runnable training, export, probe, replay, and analysis scripts
+- `src/svh_dp/`: local package for training, evaluation, and benchmark adapters
+- `src/vendor/`: bundled supporting code used by the local pipeline
 
 ## Setup
 
@@ -64,16 +64,16 @@ Some scripts rely on external benchmark stacks that are intentionally not pinned
 ## Quick Start
 
 ```bash
-python core_code/scripts/run_training_testing.py --variant full
-python core_code/scripts/check_benchmark_backends.py
-python core_code/scripts/export_rlbench_adapter_sample.py
-python core_code/scripts/probe_calvin_native_eval.py --help
+python src/scripts/run_training_testing.py --variant full
+python src/scripts/check_benchmark_backends.py
+python src/scripts/export_rlbench_adapter_sample.py
+python src/scripts/probe_calvin_native_eval.py --help
 ```
 
 Default configuration:
 
 ```text
-core_code/config/default.yaml
+src/config/default.yaml
 ```
 
 ## Release Scope

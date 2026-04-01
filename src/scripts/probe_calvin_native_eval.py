@@ -511,7 +511,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--output",
-        default=str(PROJECT_ROOT / "Experiment" / "core_code" / "logs" / "calvin_native_eval_probe.json"),
+        default=str(PROJECT_ROOT / "src" / "logs" / "calvin_native_eval_probe.json"),
     )
     parser.add_argument(
         "--max-rollout-steps",

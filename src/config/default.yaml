@@ -14,11 +14,11 @@ dataset:
   base_noise_scale: 0.05
   perturb_noise_scale: 0.15
   rlbench_export:
-    rollout_path: Experiment/core_code/logs/rlbench_low_dim_rollouts_sample.json
+    rollout_path: src/logs/rlbench_low_dim_rollouts_sample.json
     val_ratio: 0.5
     obs_perturb_scale: 0.02
   calvin_export:
-    rollout_path: Experiment/core_code/logs/calvin_adapter_sample.json
+    rollout_path: src/logs/calvin_adapter_sample.json
     val_ratio: 0.5
     obs_perturb_scale: 0.02
 
@@ -93,8 +93,8 @@ search:
       randomization_scale: 1.35
 
 paths:
-  checkpoint_dir: Experiment/core_code/checkpoints
-  log_dir: Experiment/core_code/logs
+  checkpoint_dir: src/checkpoints
+  log_dir: src/logs
 
 benchmarks:
   rlbench:
@@ -172,7 +172,7 @@ benchmarks:
       search_max_depth: 4
     workspace:
       preferred_root: Experiment/code_references/calvin_workspace
-      activation_script_path: Experiment/core_code/logs/calvin_workspace_env.sh
+      activation_script_path: src/logs/calvin_workspace_env.sh
     dataset:
       search_roots:
         - Experiment/datasets

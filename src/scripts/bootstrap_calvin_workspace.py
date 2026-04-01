@@ -36,9 +36,9 @@ Typical layouts that can work:
 After copying the code into this workspace, run:
 
 ```bash
-python Experiment/core_code/scripts/bootstrap_calvin_workspace.py
-python Experiment/core_code/scripts/diagnose_calvin_env.py
-python Experiment/core_code/scripts/check_benchmark_backends.py
+python src/scripts/bootstrap_calvin_workspace.py
+python src/scripts/diagnose_calvin_env.py
+python src/scripts/check_benchmark_backends.py
 ```
 """
 

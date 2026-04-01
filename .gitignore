@@ -11,8 +11,8 @@ Thumbs.db
 .vscode/
 
 # Training outputs and generated artifacts
-core_code/checkpoints/
-core_code/logs/
+src/checkpoints/
+src/logs/
 *.pth
 *.pt
 *.ckpt
