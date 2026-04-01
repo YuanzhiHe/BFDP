@@ -1,0 +1,198 @@
+seed: 7
+device: cpu
+
+dataset:
+  source: synthetic
+  train_size: 256
+  val_size: 128
+  obs_dim: 12
+  proprio_dim: 6
+  vocab_size: 10
+  num_phases: 4
+  action_dim: 7
+  chunk_len: 3
+  base_noise_scale: 0.05
+  perturb_noise_scale: 0.15
+  rlbench_export:
+    rollout_path: Experiment/core_code/logs/rlbench_low_dim_rollouts_sample.json
+    val_ratio: 0.5
+    obs_perturb_scale: 0.02
+  calvin_export:
+    rollout_path: Experiment/core_code/logs/calvin_adapter_sample.json
+    val_ratio: 0.5
+    obs_perturb_scale: 0.02
+
+model:
+  hidden_dim: 64
+  semantic_dim: 32
+  cond_dim: 24
+  freeze_vla: true
+  task_structured_decoder:
+    enabled: false
+    task_embedding_dim: 8
+    hidden_dim: 64
+    residual_scale: 1.0
+  prefix_decoder:
+    enabled: false
+    prefix_steps: 5
+    task_embedding_dim: 8
+    step_embedding_dim: 8
+    hidden_dim: 64
+    residual_scale: 1.0
+  turn_on_led_transition_decoder:
+    enabled: false
+    prefix_steps: 8
+    step_embedding_dim: 8
+    hidden_dim: 64
+    residual_scale: 1.0
+
+training:
+  batch_size: 32
+  epochs: 8
+  learning_rate: 0.001
+  weight_decay: 0.0
+  grad_clip: 1.0
+  action_success_threshold: 1.6
+  strict_success_multipliers:
+    - 0.05
+    - 0.0625
+    - 0.075
+  completion_tail_steps: 2
+  completion_terminal_multiplier: 0.05
+  completion_tail_mean_multiplier: 0.0625
+  completion_tail_max_multiplier: 0.075
+  supervision_tail_start_fraction: 0.75
+  supervision_tail_sample_weight: 1.5
+  supervision_terminal_sample_weight: 1.75
+  supervision_chunk_tail_weight: 1.25
+  supervision_gripper_dim_weight: 3.0
+  supervision_gripper_change_sample_weight: 2.5
+  supervision_gripper_sign_head_weight: 0.75
+  supervision_turn_on_led_sample_weight: 1.5
+  supervision_turn_on_led_early_sample_weight: 3.0
+  supervision_turn_on_led_transition_weight: 0.75
+  supervision_turn_on_led_transition_sign_weight: 1.5
+  supervision_turn_on_led_transition_margin: 0.5
+  supervision_turn_on_led_transition_offsets: 3
+  turn_on_led_head_oversample_factor: 4
+  phase_loss_weight: 0.5
+  curriculum_bias: 0.0
+  randomization_scale: 1.0
+
+search:
+  enabled: true
+  candidates:
+    - phase_loss_weight: 0.25
+      curriculum_bias: 0.0
+      randomization_scale: 1.0
+    - phase_loss_weight: 0.5
+      curriculum_bias: 0.2
+      randomization_scale: 1.2
+    - phase_loss_weight: 0.75
+      curriculum_bias: 0.35
+      randomization_scale: 1.35
+
+paths:
+  checkpoint_dir: Experiment/core_code/checkpoints
+  log_dir: Experiment/core_code/logs
+
+benchmarks:
+  rlbench:
+    qt_qpa_platform: offscreen
+    coppeliasim_root: C:/Program Files/CoppeliaRobotics/CoppeliaSimPro
+    headless: true
+    task: ReachTarget
+    arm_action_mode: JointVelocity
+    max_steps: 1
+    low_dim_only: true
+    adapter:
+      rollout_horizon: 4
+      sample_episodes: 2
+      policy: zero
+      obs_slice:
+        start: 0
+        end: 12
+      proprio_slice:
+        start: 12
+        end: 18
+      action_dim: 8
+    corpus:
+      output_dir: Experiment/datasets/rlbench_low_dim
+      tasks:
+        - ReachTarget
+        - CloseBox
+      num_shards: 2
+      episodes_per_shard: 3
+      rollout_horizon: 4
+      policy: random
+      base_seed: 17
+    probe:
+      candidate_tasks:
+        - ReachTarget
+        - CloseBox
+        - PickAndLift
+        - OpenDrawer
+        - TakeLidOffSaucepan
+      episodes: 1
+      horizon: 2
+      policy: random
+      base_seed: 41
+      catalog_probe_start_index: 0
+      catalog_probe_limit: 8
+    visual_probe:
+      task: ReachTarget
+      qt_qpa_platforms:
+        - minimal
+        - offscreen
+      cameras:
+        - front
+      image_sizes:
+        - 64
+      render_modes:
+        - OPENGL3
+        - OPENGL
+        - OPENGL_AUXILIARY
+        - EXTERNAL
+      timeout_sec: 20
+  calvin:
+    native_gripper_decode:
+      enabled: true
+      mode: discrete_sign
+      threshold: 0.0
+    probe:
+      module_names:
+        - calvin_env.envs.play_table_env
+        - calvin_agent
+      smoke_imports:
+        - calvin_agent.evaluation.utils
+      search_roots:
+        - Experiment/code_references/calvin_workspace
+        - Experiment/code_references
+        - Experiment/datasets
+      search_max_depth: 4
+    workspace:
+      preferred_root: Experiment/code_references/calvin_workspace
+      activation_script_path: Experiment/core_code/logs/calvin_workspace_env.sh
+    dataset:
+      search_roots:
+        - Experiment/datasets
+      search_max_depth: 4
+      require_non_mock_for_default_export: false
+    adapter:
+      dataset_path:
+      split: validation
+      lang_folder: lang_annotations
+      sample_sequences: 2
+      rollout_horizon: 4
+      export_mode: prefix
+      action_key: rel_actions
+      obs_slice:
+        start: 0
+        end: 9
+      scene_obs_slice:
+        start: 0
+        end: 24
+      proprio_slice:
+        start: 9
+        end: 15
+      action_dim: 7

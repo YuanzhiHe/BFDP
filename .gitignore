@@ -1,0 +1,41 @@
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Training outputs and generated artifacts
+core_code/checkpoints/
+core_code/logs/
+*.pth
+*.pt
+*.ckpt
+
+# Local datasets and large archives
+datasets/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+*.npy
+*.npz
+*.pkl
+*.h5
+*.hdf5
+
+# Benchmark code drops or local vendor mirrors that should stay private unless
+# intentionally curated for release.
+code_references/
+
+# Local temp files
+tmp/
+.tmp/
+*.tmp

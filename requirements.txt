@@ -1,0 +1,12 @@
+# Core runtime dependencies
+numpy>=1.24
+PyYAML>=6.0
+hydra-core>=1.3
+omegaconf>=2.3
+torch>=2.0
+
+# Optional benchmark stacks are intentionally excluded here because they are
+# platform-specific and usually installed from their upstream instructions:
+# - CALVIN / calvin_agent / calvin_env
+# - RLBench
+# - PyRep
